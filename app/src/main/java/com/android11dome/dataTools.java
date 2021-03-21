@@ -55,7 +55,7 @@ class dataTools {
      * @data #onActivityResult
      */
     public void savePermissions(int requestCode, int resultCode, Intent data) {
-        if (requestCode!=resultCode)return;
+        if (this.requestCode!=requestCode)return;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             try {
                 Uri uri = data.getData();
