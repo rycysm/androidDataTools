@@ -11,6 +11,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import java.nio.charset.StandardCharsets;
+
 public class MainActivity extends AppCompatActivity {
     dataTools dataTools;
     @Override
@@ -26,32 +28,35 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         dataTools.savePermissions(requestCode, resultCode, data);//保存权限
     }
-
-
-
-
     public void button1(View view) {
         dataTools.requestPermission();//申请权限
     }
-
     public void button2(View view){
         dataTools.copyToData(getSdPath()+"/1.txt","/test","1.txt","application/txt");//将sd卡的1.txt文件复制到data/test/1.txt
-
-
     }
     public void button3(View view) {
         dataTools.delete("/test","1.txt");//删除data/test/1.txt文件
-
     }
     public void button4(View view) {
         dataTools.renameTo("/test","1.txt","2.txt");//将data/test/1.txt重命名为data/test/2.txt
-
     }
-
     public void button5(View view) {
         Toast.makeText(MainActivity.this,link(dataTools.getList("/test"),"\n"),Toast.LENGTH_SHORT).show();//获取data/test/目录下的文件列表
     }
-
+    public void button6(View view) {
+        Log.e(String.valueOf(dataTools.copyToSdcard("/test","1.txt",getSdPath()+"/3.txt")),"1111111");///将data/test/1.txt复制到sd卡的3.txt
+    }
+    public void button7(View view) {
+        byte[] bytes=dataTools.read("/test","1.txt");
+        if (bytes==null){
+            Toast.makeText(MainActivity.this,"读取文件为空",Toast.LENGTH_SHORT).show();
+            return;
+        }
+        Toast.makeText(MainActivity.this, new String(bytes, 0, bytes.length, StandardCharsets.UTF_8),Toast.LENGTH_SHORT).show();//读入data/test/1.txt文件内容
+    }
+    public void button8(View view) {
+        dataTools.write("/test","1.txt","application/txt","我是测试文本".getBytes());//将文本写到data/test/1.txt
+    }
     public static String getSdPath() {
         String state = Environment.getExternalStorageState();
         return "mounted".equals(state) && Environment.getExternalStorageDirectory().canWrite() ? Environment.getExternalStorageDirectory().getPath() : "";

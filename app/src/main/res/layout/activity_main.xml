@@ -25,6 +25,18 @@
         app:layout_constraintTop_toTopOf="parent"
         android:layout_width="fill_parent"
         android:onClick="button2"/>
+
+
+    <Button
+        android:layout_height="wrap_content"
+        android:text="复制文件2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="fill_parent"
+        android:onClick="button6"/>
+
     <Button
         android:layout_height="wrap_content"
         android:text="删除文件"
@@ -53,5 +65,23 @@
         android:layout_width="fill_parent"
         android:onClick="button5"/>
 
+    <Button
+        android:layout_height="wrap_content"
+        android:text="读"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="fill_parent"
+        android:onClick="button7"/>
 
+    <Button
+        android:layout_height="wrap_content"
+        android:text="写"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="fill_parent"
+        android:onClick="button8"/>
 </LinearLayout>

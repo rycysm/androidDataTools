@@ -30,7 +30,7 @@
       <option name="IGNORE_JAVADOC_PERIOD" value="true" />
       <option name="IGNORE_DUPLICATED_THROWS" value="false" />
       <option name="IGNORE_POINT_TO_ITSELF" value="false" />
-      <option name="myAdditionalJavadocTags" value="fileType,targetName,targetDir,sourcePath,fileName,dir,requestCode,resultCode,data" />
+      <option name="myAdditionalJavadocTags" value="fileType,targetName,targetDir,sourcePath,fileName,dir,requestCode,resultCode,data,context,sourceDir,sourceFilename,targetPath,Dir" />
     </inspection_tool>
   </profile>
 </component>
