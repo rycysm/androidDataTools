@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         dataTools=new dataTools(this,11);
 
-        ActivityCompat.requestPermissions(this, new String[]{"android.permission.WRITE_EXTERNAL_STORAGE"}, 64);
+        ActivityCompat.requestPermissions(this, new String[]{"android.permission.WRITE_EXTERNAL_STORAGE"}, 64);//申请存储卡权限
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -56,6 +56,18 @@ public class MainActivity extends AppCompatActivity {
     }
     public void button8(View view) {
         dataTools.write("/test","1.txt","application/txt","我是测试文本".getBytes());//将文本写到data/test/1.txt
+    }
+    public void button9(View view) {
+        dataTools.asyncRead("/test","1.txt", 1, new dataTools.AsyncRead() {//保留java1.7的写法方便工程移值
+                    @Override
+                    public void onRead(byte[] data, int taskId) {//此方法回调前已经发送到主线程可以直接操作UI
+                        if (data==null){
+                            Toast.makeText(MainActivity.this,"读取文件为空",Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        Toast.makeText(MainActivity.this, new String(data, 0, data.length, StandardCharsets.UTF_8),Toast.LENGTH_SHORT).show();//读入data/test/1.txt文件内容
+                    }
+        });
     }
     public static String getSdPath() {
         String state = Environment.getExternalStorageState();

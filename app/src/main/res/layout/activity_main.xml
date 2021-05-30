@@ -75,6 +75,8 @@
         android:layout_width="fill_parent"
         android:onClick="button7"/>
 
+
+
     <Button
         android:layout_height="wrap_content"
         android:text="写"
@@ -84,4 +86,15 @@
         app:layout_constraintTop_toTopOf="parent"
         android:layout_width="fill_parent"
         android:onClick="button8"/>
+
+    <Button
+        android:layout_height="wrap_content"
+        android:text="异步读取"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="fill_parent"
+        android:onClick="button9"/>
+
 </LinearLayout>

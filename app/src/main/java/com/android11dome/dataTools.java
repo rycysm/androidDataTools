@@ -2,8 +2,11 @@ package com.android11dome;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Handler;
 import android.provider.DocumentsContract;
 import androidx.documentfile.provider.DocumentFile;
 
@@ -14,6 +17,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.ByteBuffer;
+
 /**
  *dataTools 提供一个对android11 Android/data目录下非自身应用文件的一个操作方案
  * by 若忧愁
@@ -239,16 +244,13 @@ class dataTools {
                 }
                 i++;
             }
-
             DocumentFile[] documentFile1 = documentFile.listFiles();
            String[] res = new String[documentFile1.length];
            int i1 =0;
            while (i1<documentFile1.length){
-
                res[i1]=documentFile1[i1].getName();
                i1++;
            }
-
             return res;
         }catch (Exception e){
             e.printStackTrace();
@@ -338,6 +340,73 @@ class dataTools {
         }
         return buffer;
     }
+    /**
+     * 将byte[] 写出到data目录的文件中如果没有这个文件会自动创建目录及文件
+     * @Dir  #写出的文件目录以data开始 如拷贝至data/test/目录 那就是 /test
+     * @fileName #写出的文件名
+     * @fileType 目录文件类型 如txt文件 application/txt
+     * @return #将在asyncRead接口中的onRead中返回数据和传入时的taskId
+     */
+    public void asyncRead(String dir ,String fileName,int taskId,AsyncRead asyncRead) {
+        new Thread(new Runnable() {//保留java1.7的写法方便工程移值
+            @Override
+            public void run() {
+                byte[] buffer = null;
+                ByteArrayOutputStream arrayOutputStream = new ByteArrayOutputStream();
+                InputStream inputStream = null;
+                try {
+                    Uri uri1 = Uri.parse("content://com.android.externalstorage.documents/tree/primary%3AAndroid%2Fdata");
+                    DocumentFile documentFile = DocumentFile.fromTreeUri(context,uri1);
+                    String[] list = dir.split("/");
+                    int i=0;
+                    while (i<list.length) {
+                        if (!list[i].equals("")) {
+                            documentFile = getDocumentFile1(documentFile,list[i]);
+                        }
+                        i++;
+                    }
+                    documentFile=documentFile.findFile(fileName);
+                    inputStream = context.getContentResolver().openInputStream(documentFile.getUri());
+                    buffer=new byte[inputStream.available()];
+                    while (true)
+                    {
+                        int readLength = inputStream.read(buffer);
+                        if (readLength == -1) break;
+                        arrayOutputStream.write(buffer, 0, readLength);
+                    }
+                    inputStream.close();
+                    arrayOutputStream.close();
+                } catch (Exception var5) {
+                    var5.printStackTrace();
+                    if(inputStream!=null){
+                        try {
+                            inputStream.close();
+                            arrayOutputStream.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+                byte[] finalBuffer = buffer;
+                context.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        asyncRead.onRead(finalBuffer,taskId);
+                    }
+                });
+
+            }
+        }).start();
+    }
+    /**
+     * 异步读取接口
+     * @data #返回的数据可能为空需要判断
+     * @taskId #调用时传入的任务id
+     */
+   public interface AsyncRead{
+        void onRead(byte[] data,int taskId);
+    }
+
     private boolean doDataOutput2(byte[] bytes ,OutputStream outputStream){
         try {
             outputStream.write( bytes,0,bytes.length);
