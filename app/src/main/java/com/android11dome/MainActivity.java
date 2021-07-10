@@ -69,6 +69,9 @@ public class MainActivity extends AppCompatActivity {
                     }
         });
     }
+    public void button10(View view) {
+        Toast.makeText(MainActivity.this,dataTools.isPermissions()?"权限已获取":"没有权限",Toast.LENGTH_SHORT).show();//判断是否有权限
+    }
     public static String getSdPath() {
         String state = Environment.getExternalStorageState();
         return "mounted".equals(state) && Environment.getExternalStorageDirectory().canWrite() ? Environment.getExternalStorageDirectory().getPath() : "";

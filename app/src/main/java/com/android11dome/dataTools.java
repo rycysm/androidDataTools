@@ -71,6 +71,16 @@ class dataTools {
         }
     }
     /**
+     * 保存权限onActivityResult返回的参数全部传入即可
+     * @return #返回一个boolean true有权限 false 无权限
+     */
+    public boolean isPermissions() {
+        Uri uri1 = Uri.parse("content://com.android.externalstorage.documents/tree/primary%3AAndroid%2Fdata");
+        DocumentFile documentFile = DocumentFile.fromTreeUri(this.context, uri1);
+        if(documentFile==null)return false;
+        return documentFile.canWrite();
+    }
+    /**
      * 将sdcard中的文件拷贝至data目录中
      * @sourcePath #sdcard中的完整文件路径
      * @targetDir  #拷贝至的文件目录以data开始 如拷贝至data/test/目录 那就是 /test
