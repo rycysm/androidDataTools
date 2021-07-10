@@ -295,8 +295,8 @@ class dataTools {
         }
     }
     /**
-     * 将byte[] 写出到data目录的文件中如果没有这个文件会自动创建目录及文件
-     * @Dir  #写出的文件目录以data开始 如拷贝至data/test/目录 那就是 /test
+     * 读取data下指定路径的文件为byte[]
+     * @Dir  #读取的文件目录以data开始 如读取data/test/目录 那就是 /test
      * @fileName #写出的文件名
      * @fileType 目录文件类型 如txt文件 application/txt
      * @return #返回一个byte[] 如文件为空或者不存在此返回可能为null请判断后使用
@@ -341,8 +341,8 @@ class dataTools {
         return buffer;
     }
     /**
-     * 将byte[] 写出到data目录的文件中如果没有这个文件会自动创建目录及文件
-     * @Dir  #写出的文件目录以data开始 如拷贝至data/test/目录 那就是 /test
+     * 异步读取data下指定路径的文件为byte[]
+     * @Dir  #读取的文件目录以data开始 如读取data/test/目录 那就是 /test
      * @fileName #写出的文件名
      * @fileType 目录文件类型 如txt文件 application/txt
      * @return #将在asyncRead接口中的onRead中返回数据和传入时的taskId
