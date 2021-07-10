@@ -71,7 +71,7 @@ class dataTools {
         }
     }
     /**
-     * 保存权限onActivityResult返回的参数全部传入即可
+     * 判断是否获取使用data目录权限
      * @return #返回一个boolean true有权限 false 无权限
      */
     public boolean isPermissions() {
