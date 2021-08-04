@@ -5,6 +5,7 @@ import androidx.core.app.ActivityCompat;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -15,18 +16,25 @@ import java.nio.charset.StandardCharsets;
 
 public class MainActivity extends AppCompatActivity {
     dataTools dataTools;
+    private int requestAllFileCode =65;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         dataTools=new dataTools(this,11);
-
         ActivityCompat.requestPermissions(this, new String[]{"android.permission.WRITE_EXTERNAL_STORAGE"}, 64);//申请存储卡权限
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         dataTools.savePermissions(requestCode, resultCode, data);//保存权限
+        if(requestCode==requestAllFileCode){
+            if(dataTools.isAllFilePermission()){
+                Toast.makeText(MainActivity.this,"全部文件读写权限已成功获取",Toast.LENGTH_SHORT).show();
+            }else{
+                Toast.makeText(MainActivity.this,"您未授权全部文件读写权限",Toast.LENGTH_SHORT).show();
+            }
+        }
     }
     public void button1(View view) {
         dataTools.requestPermission();//申请权限
@@ -71,6 +79,17 @@ public class MainActivity extends AppCompatActivity {
     }
     public void button10(View view) {
         Toast.makeText(MainActivity.this,dataTools.isPermissions()?"权限已获取":"没有权限",Toast.LENGTH_SHORT).show();//判断是否有权限
+    }
+    public void button11(View view) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
+            Toast.makeText(MainActivity.this,"当前设备不是android11无法申请",Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (dataTools.isAllFilePermission()){
+            Toast.makeText(MainActivity.this,"权限已获取",Toast.LENGTH_SHORT).show();
+        }else{
+            dataTools.requestAllFilePermission(requestAllFileCode);
+        }
     }
     public static String getSdPath() {
         String state = Environment.getExternalStorageState();

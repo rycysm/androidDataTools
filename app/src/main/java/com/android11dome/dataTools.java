@@ -1,13 +1,12 @@
 package com.android11dome;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Handler;
+import android.os.Environment;
 import android.provider.DocumentsContract;
+import android.provider.Settings;
+
 import androidx.documentfile.provider.DocumentFile;
 
 import java.io.ByteArrayOutputStream;
@@ -17,7 +16,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.nio.ByteBuffer;
 
 /**
  *dataTools 提供一个对android11 Android/data目录下非自身应用文件的一个操作方案
@@ -416,7 +414,29 @@ class dataTools {
    public interface AsyncRead{
         void onRead(byte[] data,int taskId);
     }
-
+    /**
+     * 判断是否获得全部文件访问权限
+     * @return  #获取权限返回true没有获得返回false
+     */
+    public boolean isAllFilePermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            return Environment.isExternalStorageManager();
+        }else {
+            return false;
+        }
+    }
+    /**
+     * 申请全部文件访问权限
+     * @requestCode 请求权限请求码
+     * @return  #onActivityResult 中回调请判断请求码并使用isAllFilePermission检查权限
+     */
+    public void requestAllFilePermission(int requestCode){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
+            intent.setData(Uri.parse("package:" + context.getPackageName()));
+            context.startActivityForResult(intent, requestCode);
+        }
+    }
     private boolean doDataOutput2(byte[] bytes ,OutputStream outputStream){
         try {
             outputStream.write( bytes,0,bytes.length);
