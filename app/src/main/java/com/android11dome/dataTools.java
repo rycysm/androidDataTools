@@ -91,7 +91,7 @@ class dataTools {
         if ((new File(sourcePath)).exists()) {
             try {
                 InputStream inStream = new FileInputStream(sourcePath);
-                byte[] buffer = new byte[inStream.available()];
+               // byte[] buffer = new byte[inStream.available()];
                 Uri uri1 = Uri.parse("content://com.android.externalstorage.documents/tree/primary%3AAndroid%2Fdata" );
                 DocumentFile documentFile = DocumentFile.fromTreeUri(this.context, uri1);
                 String[] list=targetDir.split("/");
@@ -114,9 +114,11 @@ class dataTools {
                     newFile = documentFile.createFile(fileType, targetName);
                 }
                 OutputStream excelOutputStream = this.context.getContentResolver().openOutputStream(newFile.getUri());
-                int byteread;
-                while ((byteread = inStream.read(buffer)) != -1) {
-                    excelOutputStream.write(buffer, 0, byteread);
+                byte[] buffer = new byte[1024];
+                int len = 0;
+                while ((len = inStream.read(buffer)) != -1)
+                {
+                    excelOutputStream.write(buffer, 0, len);
                 }
                 inStream.close();
                 excelOutputStream.close();
@@ -155,11 +157,12 @@ class dataTools {
             }
             documentFile=documentFile.findFile(sourceFilename);
             InputStream   inputStream = this.context.getContentResolver().openInputStream(documentFile.getUri());
-            byte[]  buffer=new byte[inputStream.available()];
             FileOutputStream fs = new FileOutputStream(targetPath);
-            int byteread;
-            while ((byteread = inputStream.read(buffer)) != -1) {
-                fs.write(buffer, 0, byteread);
+            byte[] buffer = new byte[1024];
+            int len = 0;
+            while ((len = inputStream.read(buffer)) != -1)
+            {
+                fs.write(buffer, 0, len);
             }
             inputStream.close();
             fs.close();
