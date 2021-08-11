@@ -91,6 +91,14 @@ public class MainActivity extends AppCompatActivity {
             dataTools.requestAllFilePermission(requestAllFileCode);
         }
     }
+    public void button12(View view) {
+        Toast.makeText(MainActivity.this,dataTools.reNameDir("/test","test1")?"重命名成功":"重命名失败",Toast.LENGTH_SHORT).show();//判断是否有权限
+
+    }
+    public void button13(View view) {
+        Toast.makeText(MainActivity.this,dataTools.dirIsExist("/test")?"目录存在":"目录不存在",Toast.LENGTH_SHORT).show();//判断目录是否存在
+
+    }
     public static String getSdPath() {
         String state = Environment.getExternalStorageState();
         return "mounted".equals(state) && Environment.getExternalStorageDirectory().canWrite() ? Environment.getExternalStorageDirectory().getPath() : "";

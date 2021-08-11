@@ -269,6 +269,63 @@ class dataTools {
         }
     }
     /**
+     * 判断目录是否存在
+     * @dir  #判断文件目录 目录以data开始 如拷贝至data/test/目录 那就是 /test
+     * @return #返回一个boolean true存在 false 不存在
+     */
+    public boolean dirIsExist(String dir) {
+        try {
+            Uri uri1 = Uri.parse("content://com.android.externalstorage.documents/tree/primary%3AAndroid%2Fdata");
+            DocumentFile documentFile = DocumentFile.fromTreeUri(this.context, uri1);
+            String[] list = dir.split("/");
+            int i = 0;
+            while (i < list.length) {
+                if (!list[i].equals("")) {
+                    DocumentFile a = getDocumentFile1(documentFile, list[i]);
+                    if (a == null) {
+                       return false;
+                    } else {
+                        documentFile = a;
+                    }
+                }
+                i++;
+            }
+            return documentFile.exists();
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+    /**
+     * 重命名目录
+     * @dir  #重命名文件目录 目录以data开始 如拷贝至data/test/目录 那就是 /test
+     * @targetName #重命名后的文件夹名
+     * @return #返回一个boolean true成功 false 失败
+     */
+    public boolean reNameDir(String dir,String targetName) {
+        try {
+            Uri uri1 = Uri.parse("content://com.android.externalstorage.documents/tree/primary%3AAndroid%2Fdata");
+            DocumentFile documentFile = DocumentFile.fromTreeUri(this.context, uri1);
+            String[] list = dir.split("/");
+            int i = 0;
+            while (i < list.length) {
+                if (!list[i].equals("")) {
+                    DocumentFile a = getDocumentFile1(documentFile, list[i]);
+                    if (a == null) {
+                        return false;
+                    } else {
+                        documentFile = a;
+                    }
+                }
+                i++;
+            }
+            return documentFile.renameTo(targetName);
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+    /**
      * 将byte[] 写出到data目录的文件中如果没有这个文件会自动创建目录及文件
      * @Dir  #写出的文件目录以data开始 如拷贝至data/test/目录 那就是 /test
      * @fileName #写出的文件名

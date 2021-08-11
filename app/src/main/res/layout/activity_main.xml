@@ -117,5 +117,24 @@
         android:layout_width="fill_parent"
         android:onClick="button11"/>
 
+    <Button
+        android:layout_height="wrap_content"
+        android:text="重命名目录"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="fill_parent"
+        android:onClick="button12"/>
+    <Button
+        android:layout_height="wrap_content"
+        android:text="目录是否判断"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="fill_parent"
+        android:onClick="button13"/>
+
 
 </LinearLayout>
