@@ -132,6 +132,138 @@ class dataTools {
         }
     }
     /**
+     * 将sdcard中的文件拷贝至data目录中与copyToData方法不同的是,此方法在遇到已经存在的文件时,将自动删除原文件然后重新创建,可以实现文件覆盖。
+     * @sourcePath #sdcard中的完整文件路径
+     * @targetDir  #拷贝至的文件目录以data开始 如拷贝至data/test/目录 那就是 /test
+     * @targetName #目标文件名
+     * @fileType 目录文件类型 如txt文件 application/txt
+     * @return #返回一个boolean true成功 false 失败
+     */
+    public boolean copyToData_cover(String sourcePath, String targetDir ,String targetName , String fileType) {
+        targetDir=textual(targetDir,targetName,"");
+        if ((new File(sourcePath)).exists()) {
+            try {
+                InputStream inStream = new FileInputStream(sourcePath);
+                // byte[] buffer = new byte[inStream.available()];
+                Uri uri1 = Uri.parse("content://com.android.externalstorage.documents/tree/primary%3AAndroid%2Fdata" );
+                DocumentFile documentFile = DocumentFile.fromTreeUri(this.context, uri1);
+                String[] list=targetDir.split("/");
+                int i=0;
+                while (i<list.length) {
+                    if (!list[i].equals("")) {
+                        DocumentFile a = getDocumentFile1(documentFile,list[i]);
+                        if(a==null){
+                            documentFile=documentFile.createDirectory(list[i]);
+                        }else{
+                            documentFile=a;
+                        }
+                    }
+                    i++;
+                }
+                DocumentFile newFile = null;
+                if (exists(documentFile,targetName)) {
+                    newFile = documentFile.findFile(targetName);
+                } else {
+                    newFile = documentFile.createFile(fileType, targetName);
+                }
+                OutputStream excelOutputStream = this.context.getContentResolver().openOutputStream(newFile.getUri());
+                byte[] buffer = new byte[1024];
+                int len = 0;
+                while ((len = inStream.read(buffer)) != -1)
+                {
+                    excelOutputStream.write(buffer, 0, len);
+                }
+                inStream.close();
+                excelOutputStream.close();
+                return true;
+            } catch (Exception var8) {
+                var8.printStackTrace();
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+    /**
+     * 通过目录路径,获取该目录的DocumentFile对象,如目录不存在将自动创建,获取失败将返回null,这样做可以避免重复获取同一个路径的DocumentFile导致的耗时,推荐配合copyToData_find_cover使用
+     * @dir  #获取DocumentFile的目录名
+     * @return #返回DocumentFile对象,获取失败将null
+     */
+    public DocumentFile getDocumentFile(String dir) {
+            try {
+                Uri uri1 = Uri.parse("content://com.android.externalstorage.documents/tree/primary%3AAndroid%2Fdata" );
+                DocumentFile documentFile = DocumentFile.fromTreeUri(this.context, uri1);
+                String[] list=dir.split("/");
+                int i=0;
+                while (i<list.length) {
+                    if (!list[i].equals("")) {
+                        DocumentFile a = getDocumentFile1(documentFile,list[i]);
+                        if(a==null){
+                            documentFile=documentFile.createDirectory(list[i]);
+                        }else{
+                            documentFile=a;
+                        }
+                    }
+                    i++;
+                }
+               return documentFile;
+            } catch (Exception var8) {
+                var8.printStackTrace();
+                return null;
+            }
+    }
+    /**
+     * 将sdcard中的文件拷贝至data目录中与copyToData_cover方法不同的是,此方法支持,传入一个起始的DocumentFile对象,这样可以更高性能的操作,避免重复获取同一个目录对象的耗时。
+     * @sourcePath #sdcard中的完整文件路径
+     * @targetDir  #拷贝至的文件目录以data开始 如拷贝至data/test/目录 那就是 /test
+     * @targetName #目标文件名
+     * @fileType 目录文件类型 如txt文件 application/txt
+     * @return #返回一个boolean true成功 false 失败
+     */
+    public boolean copyToData_find_cover(DocumentFile startDocumentFile,String sourcePath, String targetDir ,String targetName , String fileType) {
+        targetDir=textual(targetDir,targetName,"");
+        if ((new File(sourcePath)).exists()) {
+            try {
+                InputStream inStream = new FileInputStream(sourcePath);
+                DocumentFile documentFile = startDocumentFile;
+                String[] list=targetDir.split("/");
+                int i=0;
+                while (i<list.length) {
+                    if (!list[i].equals("")) {
+                        DocumentFile a = getDocumentFile1(documentFile,list[i]);
+                        if(a==null){
+                            documentFile=documentFile.createDirectory(list[i]);
+                        }else{
+                            documentFile=a;
+                        }
+                    }
+                    i++;
+                }
+                DocumentFile newFile = null;
+                if (exists(documentFile,targetName)) {
+                    newFile = documentFile.findFile(targetName);
+                } else {
+                    newFile = documentFile.createFile(fileType, targetName);
+                }
+                OutputStream excelOutputStream = this.context.getContentResolver().openOutputStream(newFile.getUri());
+                byte[] buffer = new byte[1024];
+                int len = 0;
+                while ((len = inStream.read(buffer)) != -1)
+                {
+                    excelOutputStream.write(buffer, 0, len);
+                }
+                inStream.close();
+                excelOutputStream.close();
+                return true;
+            } catch (Exception var8) {
+                var8.printStackTrace();
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+    /**
      * 将Android/data中的文件拷贝至sdcard
      * @sourceDir #文件原目录以data开始 如拷贝data/test/目录中的文件 那就是 /test
      * @sourceFilename #拷贝的文件名 如拷贝 data/test/1.txt 那就是1.txt

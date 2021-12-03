@@ -99,6 +99,9 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(MainActivity.this,dataTools.dirIsExist("/test")?"目录存在":"目录不存在",Toast.LENGTH_SHORT).show();//判断目录是否存在
 
     }
+    public void button14(View view){
+        dataTools.copyToData_cover(getSdPath()+"/1.txt","/test","1.txt","application/txt");//将sd卡的1.txt文件复制到data/test/1.txt,此方法可以实现自动覆盖
+    }
     public static String getSdPath() {
         String state = Environment.getExternalStorageState();
         return "mounted".equals(state) && Environment.getExternalStorageDirectory().canWrite() ? Environment.getExternalStorageDirectory().getPath() : "";
