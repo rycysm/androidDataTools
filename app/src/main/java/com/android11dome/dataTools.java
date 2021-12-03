@@ -48,7 +48,6 @@ class dataTools {
                     | Intent.FLAG_GRANT_PREFIX_URI_PERMISSION);
             intent1.putExtra(DocumentsContract.EXTRA_INITIAL_URI, uri1);
        context.startActivityForResult(intent1, requestCode);
-
     }
     /**
      * 保存权限onActivityResult返回的参数全部传入即可
@@ -211,6 +210,44 @@ class dataTools {
                 var8.printStackTrace();
                 return null;
             }
+    }
+    /**
+     * 根据传入的路径,获取文件的输入流
+     * @targetDir  #获取输入流文件的目录 如拷贝至data/test/目录 那就是 /test
+     * @targetName #目标文件名
+     * @return #返回该文件的输入流,如果失败则返回null
+     */
+    public InputStream getInputStream( String targetDir ,String targetName) {
+        targetDir=textual(targetDir,targetName,"");
+            try {
+                Uri uri1 = Uri.parse("content://com.android.externalstorage.documents/tree/primary%3AAndroid%2Fdata" );
+                DocumentFile documentFile = DocumentFile.fromTreeUri(this.context, uri1);
+                String[] list=targetDir.split("/");
+                int i=0;
+                while (i<list.length) {
+                    if (!list[i].equals("")) {
+                        DocumentFile a = getDocumentFile1(documentFile,list[i]);
+                        if(a==null){
+                            documentFile=documentFile.createDirectory(list[i]);
+                        }else{
+                            documentFile=a;
+                        }
+                    }
+                    i++;
+                }
+                DocumentFile newFile = null;
+                if (exists(documentFile,targetName)) {
+                    newFile = documentFile.findFile(targetName);
+                } else {
+                    return null;
+                }
+                return  this.context.getContentResolver().openInputStream(newFile.getUri());
+
+            } catch (Exception var8) {
+                var8.printStackTrace();
+                return null;
+            }
+
     }
     /**
      * 将sdcard中的文件拷贝至data目录中与copyToData_cover方法不同的是,此方法支持,传入一个起始的DocumentFile对象,这样可以更高性能的操作,避免重复获取同一个目录对象的耗时。
