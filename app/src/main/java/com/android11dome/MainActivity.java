@@ -37,7 +37,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
     public void button1(View view) {
-        dataTools.requestPermission();//申请权限
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            dataTools.requestPermission();//申请权限
+        }else{
+            Toast.makeText(MainActivity.this,"当前sdk版本无需申请",Toast.LENGTH_SHORT).show();
+        }
     }
     public void button2(View view){
         dataTools.copyToData(getSdPath()+"/1.txt","/test","1.txt","application/txt");//将sd卡的1.txt文件复制到data/test/1.txt
@@ -92,15 +96,15 @@ public class MainActivity extends AppCompatActivity {
         }
     }
     public void button12(View view) {
-        Toast.makeText(MainActivity.this,dataTools.reNameDir("/test","test1")?"重命名成功":"重命名失败",Toast.LENGTH_SHORT).show();//判断是否有权限
+        Toast.makeText(MainActivity.this,dataTools.renameTo("","test","test1")?"重命名成功":"重命名失败",Toast.LENGTH_SHORT).show();//判断是否有权限
 
     }
     public void button13(View view) {
-        Toast.makeText(MainActivity.this,dataTools.dirIsExist("/test")?"目录存在":"目录不存在",Toast.LENGTH_SHORT).show();//判断目录是否存在
+        Toast.makeText(MainActivity.this,dataTools.isDirExists("","test")?"目录存在":"目录不存在",Toast.LENGTH_SHORT).show();//判断目录是否存在
 
     }
     public void button14(View view){
-        dataTools.copyToData_cover(getSdPath()+"/1.txt","/test","1.txt","application/txt");//将sd卡的1.txt文件复制到data/test/1.txt,此方法可以实现自动覆盖
+        dataTools.copyToData(getSdPath()+"/1.txt","/test","1.txt","application/txt");//将sd卡的1.txt文件复制到data/test/1.txt,此方法可以实现自动覆盖
     }
     public static String getSdPath() {
         String state = Environment.getExternalStorageState();

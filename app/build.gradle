@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 32
     buildToolsVersion "30.0.3"
 
     defaultConfig {
@@ -30,9 +30,18 @@ android {
 
 dependencies {
 
+
+
+
+    //此处依赖非常重要可以直接复制到你的工程,用于解决部分手机删除文件失败,和文件操作性能低问题
+    implementation 'androidx.documentfile:documentfile:1.1.0-alpha01'
+    implementation files('libs\\switcher-1.1.1.jar')
+   //此处依赖非常重要可以直接复制到你的工程,用于解决部分手机删除文件失败,和文件操作性能低问题
+
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.google.android.material:material:1.3.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
