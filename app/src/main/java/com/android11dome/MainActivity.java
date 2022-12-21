@@ -23,6 +23,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         dataTools=new dataTools(this,11);
         ActivityCompat.requestPermissions(this, new String[]{"android.permission.WRITE_EXTERNAL_STORAGE"}, 64);//申请存储卡权限
+        if ( Build.VERSION.SDK_INT>=33){
+            Intent intent= new Intent();
+            intent.setClass(this,MainActivity2.class);
+            startActivity(intent);
+            finish();
+
+        }
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
